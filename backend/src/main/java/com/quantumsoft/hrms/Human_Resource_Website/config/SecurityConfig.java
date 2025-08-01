@@ -161,10 +161,16 @@ public class SecurityConfig {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
+        CorsConfiguration config = new CorsConfiguration(){
+        @Override
+        public String checkOrigin(String requestOrigin) {
+            // Allow any origin (with port) when credentials are enabled
+            return requestOrigin;
+        }
+    };
         config.setAllowCredentials(true);
        // config.addAllowedOriginPattern("*"); // or specific origins
-        config.setAllowedOriginPatterns(List.of("*"));
+       // config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));
