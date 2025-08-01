@@ -1,0 +1,85 @@
+<div class="container">
+  <h3>{{ editMode ? 'Edit Compliance' : 'Add Compliance' }}</h3>
+
+  <form [formGroup]="complianceForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Name</label>
+      <input formControlName="name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea formControlName="description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Type</label>
+      <select formControlName="type" class="form-control">
+        <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Frequency</label>
+      <select formControlName="frequency" class="form-control">
+        <option *ngFor="let f of frequencies" [value]="f">{{ f }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Due Date</label>
+      <input type="date" formControlName="dueDate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>Penalty</label>
+      <input formControlName="penalty" class="form-control" />
+    </div>
+
+    <div class="form-check">
+      <input type="checkbox" formControlName="documentRequired" class="form-check-input" />
+      <label class="form-check-label">Document Required</label>
+    </div>
+
+    <div class="form-check">
+      <input type="checkbox" formControlName="isActive" class="form-check-input" />
+      <label class="form-check-label">Is Active</label>
+    </div>
+
+    <button class="btn btn-primary mt-2" type="submit">{{ editMode ? 'Update' : 'Create' }}</button>
+    <button class="btn btn-secondary mt-2 ms-2" type="button" (click)="resetForm()">Reset</button>
+  </form>
+
+  <hr />
+
+  <h4>All Compliances</h4>
+  <table class="table table-striped mt-3">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Frequency</th>
+        <th>Due Date</th>
+        <th>Penalty</th>
+        <th>Document Required</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of compliances">
+        <td>{{ c.name }}</td>
+        <td>{{ c.type }}</td>
+        <td>{{ c.frequency }}</td>
+        <td>{{ c.dueDate }}</td>
+        <td>{{ c.penalty }}</td>
+        <td>{{ c.documentRequired ? 'Yes' : 'No' }}</td>
+        <td>{{ c.isActive ? 'Active' : 'Inactive' }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" (click)="onEdit(c)">Edit</button>
+          <button class="btn btn-sm btn-danger ms-1" (click)="onDelete(c.complianceId!)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

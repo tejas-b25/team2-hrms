@@ -1,0 +1,59 @@
+<div class="card m-4 p-4">
+  <h2 class="mb-3">{{ isEdit ? 'Update Benefit' : 'Add Benefit' }}</h2>
+
+  <form [formGroup]="benefitForm" (ngSubmit)="onSubmit()">
+    <div class="form-group mb-3">
+      <label for="name">Name</label>
+      <input id="name" formControlName="name" class="form-control" />
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="type">Type</label>
+      <select id="type" formControlName="type" class="form-control">
+        <option *ngFor="let type of benefitTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <div class="form-check mb-3">
+      <input id="isTaxable" type="checkbox" formControlName="isTaxable" class="form-check-input" />
+      <label for="isTaxable" class="form-check-label">Taxable?</label>
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+      {{ isEdit ? 'Update' : 'Create' }}
+    </button>
+    <button class="btn btn-secondary ms-2" type="button" (click)="resetForm()">Cancel</button>
+  </form>
+</div>
+
+<div class="card m-4 p-4">
+  <h3 class="mb-3">All Benefits</h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+        <th>Taxable</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of benefits">
+        <td>{{ b.name }}</td>
+        <td>{{ b.description }}</td>
+        <td>{{ b.type }}</td>
+        <td>{{ b.isTaxable ? 'Yes' : 'No' }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="editBenefit(b)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteBenefit(b.benefitId)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
