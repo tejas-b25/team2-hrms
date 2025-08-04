@@ -1,9 +1,9 @@
 <div class="wrapper">
   <app-sidebar></app-sidebar>
-  
+
   <div id="content">
     <app-navbar></app-navbar>
-    
+
     <div class="container-fluid">
       <div class="row mb-4">
         <div class="col-12">
@@ -17,14 +17,24 @@
               </div>
               <div class="btn-group ms-2" role="group">
                 <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                  Department: {{department}}
+                  Department: {{ department }}
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#" (click)="department = 'All'">All Departments</a></li>
-                  <li><a class="dropdown-item" href="#" (click)="department = 'Sales'">Sales</a></li>
-                  <li><a class="dropdown-item" href="#" (click)="department = 'Technology'">Technology</a></li>
-                  <li><a class="dropdown-item" href="#" (click)="department = 'HR'">HR</a></li>
-                  <li><a class="dropdown-item" href="#" (click)="department = 'Finance'">Finance</a></li>
+                  <li>
+                    <a class="dropdown-item" (click)="department = 'All'" style="cursor: pointer;">All Departments</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" (click)="department = 'Sales'" style="cursor: pointer;">Sales</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" (click)="department = 'Technology'" style="cursor: pointer;">Technology</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" (click)="department = 'HR'" style="cursor: pointer;">HR</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" (click)="department = 'Finance'" style="cursor: pointer;">Finance</a>
+                  </li>
                 </ul>
               </div>
             </div>
