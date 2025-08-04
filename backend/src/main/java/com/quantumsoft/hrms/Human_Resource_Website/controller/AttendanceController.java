@@ -1,111 +1,78 @@
-package com.quantumsoft.hrms.Human_Resource_Website.controller;
+package com.quantumsoft.hrms.Human_Resource_Website.entity;
 
-import com.quantumsoft.hrms.Human_Resource_Website.entity.Attendance;
-import com.quantumsoft.hrms.Human_Resource_Website.entity.ClockInRequest;
-import com.quantumsoft.hrms.Human_Resource_Website.entity.ClockOutRequest;
-import com.quantumsoft.hrms.Human_Resource_Website.exception.ResourceNotFoundException;
-import com.quantumsoft.hrms.Human_Resource_Website.serviceImpl.AttendanceServiceImpl;
-import jakarta.servlet.http.HttpServletResponse;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.quantumsoft.hrms.Human_Resource_Website.enums.AttendanceStatus;
+import com.quantumsoft.hrms.Human_Resource_Website.enums.Mode;
+import com.quantumsoft.hrms.Human_Resource_Website.enums.RegularizationStatus;
+import com.quantumsoft.hrms.Human_Resource_Website.enums.WorkFrom;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
-@CrossOrigin("*")
-@RestController
-@RequestMapping("/api/attendance")
-public class AttendanceController {
+@Entity
+@Table(name="attendance")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Attendance {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long attendanceId;
 
-    @Autowired
-    private AttendanceServiceImpl attendanceService;
+    @NotNull(message = "Employee is required")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "emp_id", nullable = false)
+    private Employee employee;
 
-    @PreAuthorize("hasAnyRole('EMPLOYEE','MANAGER')")
-    @PostMapping("/clock-in")
-    public ResponseEntity<?> clockIn(@RequestBody ClockInRequest request) {
-        try {
-            attendanceService.clockIn(request);
-            return ResponseEntity.ok("Clock-in successful");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-    @PreAuthorize("hasAnyRole('EMPLOYEE','MANAGER')")
-    @PutMapping("/clock-out")
-    public ResponseEntity<String> clockOut() {
-        try {
-            attendanceService.clockOut();
-            return ResponseEntity.ok("Clock-out successful");
-        } catch (IllegalArgumentException | ResourceNotFoundException ex) {
-            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Unexpected error: " + ex.getMessage());
-        }
-    }
-    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
-    @GetMapping("/report/csv")
-    public void generateCsvReport(HttpServletResponse response,
-                                  @RequestParam(required = false) Long empId,
-                                  @RequestParam(required = false) String fromDate,
-                                  @RequestParam(required = false) String toDate) throws IOException {
-        attendanceService.generateCsvReport(response, empId, fromDate, toDate);
-    }
-    @GetMapping("/report/pdf")
-    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
-    public void generatePdfReport(HttpServletResponse response,
-                                  @RequestParam(required = false) Long empId,
-                                  @RequestParam(required = false) String department,
-                                  @RequestParam(required = false) String fromDate,
-                                  @RequestParam(required = false) String toDate) throws IOException {
-        attendanceService.generatePdfReport(response, empId, department, fromDate, toDate);
-    }
-    @GetMapping("/status/{empId}")
-    public ResponseEntity<?> getMonthlyStatus(
-            @PathVariable Long empId,
-            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().getMonthValue()}") int month,
-            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().getYear()}") int year) {
+    @NotNull(message = "Date is required")
+    private LocalDate date;
 
-        Map<String, Object> result = attendanceService.getMonthlyStatus(empId, month, year);
-        return ResponseEntity.ok(result);
-}
-    @PostMapping("/regularize/request")
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'MANAGER')")
-    public ResponseEntity<String> requestRegularization(
-//                                                        @RequestParam @NotNull UUID empId,
-                                                        @RequestParam @NotNull String date,
-                                                        @RequestParam String reason) {
-        attendanceService.requestRegularization(date, reason);
-        return ResponseEntity.ok("Regularization request submitted successfully.");
-    }
+    @NotNull(message = "Clock-in time is required")
+    private LocalTime clockInTime;
 
-    @PutMapping("/regularize/approve/{attendanceId}")
-    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
-    public ResponseEntity<String> approveRegularization(@PathVariable Long attendanceId) {
-        attendanceService.approveRegularization(attendanceId);
-        return ResponseEntity.ok("Regularization approved successfully.");
-    }
+    @NotNull(message = "Clock-out time is required")
+    private LocalTime clockOutTime;
 
-    @PutMapping("/regularize/reject/{attendanceId}")
-    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
-    public ResponseEntity<String> rejectRegularization(@PathVariable Long attendanceId,
-                                                       @RequestParam String rejectionReason) {
-        attendanceService.rejectRegularization(attendanceId, rejectionReason);
-        return ResponseEntity.ok("Regularization rejected.");
-    }
+    @NotNull(message = "Mode is required")
+    @Enumerated(EnumType.STRING)
+    private Mode mode;
 
-    @GetMapping("/regularize/requests/all")
-    @PreAuthorize("hasAnyRole('HR.'ADMIN')")
-    public ResponseEntity<List<Attendance>> getAllRegularizationRequests(){
-       List<Attendance> requests = attendanceService.getAllRegularizationRequests();
-    return ResponseEntity.ok(requests);
+    @NotNull(message = "Work-from is required")
+    @Enumerated(EnumType.STRING)
+    private WorkFrom workFrom;
 
-    }
+    private Double latitude;
 
+    private Double longitude;
+
+    @PositiveOrZero(message = "Total hours worked must be zero or positive")
+    @Column(name = "total_hours_worked")
+    private Double totalHoursWorked;
+
+    private String timesheetProjectCode;  // nullable
+
+    @NotNull(message = "Attendance status is required")
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private AttendanceStatus status;
+
+    @NotNull(message = "Regularization status is required")
+    @Enumerated(EnumType.STRING)
+    private RegularizationStatus regularizationStatus; // PENDING, APPROVED, REJECTED
+
+    @Size(max = 255, message = "Regularization reason cannot exceed 255 characters")
+    private String regularizationReason;
+
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime approvedClockInTime;
+
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime approvedClockOutTime;
 }
