@@ -395,7 +395,7 @@ public class AttendanceServiceImpl implements AttendenceService {
                         .toList();
     }
 
-//    @Scheduled(cron = "0 40 12 * * *", zone = "Asia/Kolkata")// Runs daily at 11:01 AM
+@Scheduled(cron = "0 01 11 * * *", zone = "Asia/Kolkata")// Runs daily at 11:01 AM
     public void autoMarkAbsentees() {
         LocalDate today = LocalDate.now();
 
@@ -449,3 +449,4 @@ public class AttendanceServiceImpl implements AttendenceService {
     }
 
 }
+
