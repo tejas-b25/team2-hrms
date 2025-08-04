@@ -5,6 +5,7 @@ import com.quantumsoft.hrms.Human_Resource_Website.enums.Gender;
 import com.quantumsoft.hrms.Human_Resource_Website.enums.JobType;
 import com.quantumsoft.hrms.Human_Resource_Website.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,8 +32,12 @@ public class Employee {
     @Column(unique = true, nullable = false)
     private String employeeCode;
 
+    @NotBlank(message = "First name is required")
     private String firstName;
+
+    @NotBlank(message = "Last name is required")
     private String lastName;
+
     private String photo;
 
     @ManyToOne
@@ -40,18 +45,29 @@ public class Employee {
     private Employee manager;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Gender is required")
     private Gender gender;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Date of birth is required")
+    @Past(message = "Date of birth must be in the past")
     private LocalDate dob;
 
     @Column(unique = true)
+    @NotBlank(message = "Contact number is required")
+    @Pattern(regexp = "^\\d{10}$", message = "Contact number must be 10 digits")
     private String contactNumber;
 
     @Column(unique = true)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
 
+    @NotBlank(message = "Address is required")
     private String address;
+
+    @NotBlank(message = "Emergency contact is required")
+    @Pattern(regexp = "^\\d{10}$", message = "Emergency contact must be 10 digits")
     private String emergencyContact;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -131,3 +147,4 @@ public class Employee {
     @JsonBackReference("department-head")
     private Department managedDepartments;
 }
+
