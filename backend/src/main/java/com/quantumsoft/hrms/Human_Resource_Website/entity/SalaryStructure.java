@@ -3,6 +3,9 @@ package com.quantumsoft.hrms.Human_Resource_Website.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.quantumsoft.hrms.Human_Resource_Website.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -21,16 +24,25 @@ public class SalaryStructure {
     @JsonBackReference("employee-salary")
     private Employee employee;
 
+    @NotNull(message = "Basic salary is required")
+    @Positive(message = "Basic salary must be greater than 0")
     private Double basicSalary;
 
+    @NotNull(message = "HRA is required")
+    @PositiveOrZero(message = "HRA cannot be negative")
     private Double hra;
 
+    @NotNull(message = "Special allowance is required")
+    @PositiveOrZero(message = "Special allowance cannot be negative")
     private Double specialAllowance;
 
+    @PositiveOrZero(message = "Bonus cannot be negative")
     private Double bonus;
 
+    @PositiveOrZero(message = "PF deduction cannot be negative")
     private Double pfDeduction;
 
+    @PositiveOrZero(message = "PF deduction cannot be negative")
     private Double taxDeduction;
 
     private LocalDate effectiveFrom;
@@ -48,3 +60,4 @@ public class SalaryStructure {
     }
 
 }
+
