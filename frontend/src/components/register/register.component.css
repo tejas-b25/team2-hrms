@@ -1,63 +1,100 @@
+/* Register Container */
 .register-container {
-  max-width: 450px;
-  margin: 50px auto;
-  padding: 168rem;
-  border-radius: 8px;
-  background-color: #f5f5f5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
+  max-width: 360px;
+  margin: 60px auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
 }
- 
+
+/* Title */
 h2 {
   text-align: center;
-  color:#253f59;
+  color: #2c3e50;
+  font-size: 1.6rem;
   margin-bottom: 1.5rem;
+  font-weight: 600;
 }
- 
-.form-group {
-  margin-bottom: 1rem;
+
+/* Form layout */
+div {
+  margin-bottom: 1.2rem;
 }
- 
+
+/* Labels */
 label {
   display: block;
-  margin-bottom: 0.3rem;
-  font-weight: bold;
+  margin-bottom: 0.4rem;
+  color: #34495e;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
- 
-input, select {
+
+/* Input and Select */
+input,
+select {
   width: 100%;
-  padding: 0.6rem;
-  border-radius: 4px;
-  border: 1px solid #253f59;
-  font-size: 1rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+  background-color: #f9f9f9;
 }
- 
+
+input:focus,
+select:focus {
+  border-color: #2980b9;
+  outline: none;
+  background-color: #ffffff;
+}
+
+/* Submit Button */
 button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #253f59;
+  width: 50%;
+  padding: 0.6rem;
+  background-color: #2980b9;
   color: white;
   border: none;
   font-size: 1rem;
+  font-weight: 500;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  display: block;
+  margin: 1rem auto 0 auto; /* Top margin added for spacing */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
- 
-button:disabled {
-  background-color: #7abaff;
-}
- 
+
 button:hover:not(:disabled) {
-  background-color: darkgray;
+  background-color: #1c5980;
+  transform: scale(1.02);
 }
- 
- 
-.error-message {
-  color: red;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
+
+button:disabled {
+  background-color: #aec6cf;
+  cursor: not-allowed;
+}
+
+/* Loading Message */
+div[ngIf="isLoading"],
+.loading-message {
   text-align: center;
+  color: #7f8c8d;
+  font-size: 0.95rem;
+  margin-top: 1rem;
 }
- 
- 
+
+/* Error Message */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  text-align: center;
+  background-color: #fdecea;
+  border-left: 4px solid #e74c3c;
+  padding: 0.6rem;
+  border-radius: 5px;
+}
