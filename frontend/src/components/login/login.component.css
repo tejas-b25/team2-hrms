@@ -45,7 +45,7 @@
 .logo {
   width: 250px;       /* Increased width */
   height: 300px;      /* Increased height */
-  background-color: bisque;
+  background-color: rgb(83, 183, 237);
   object-fit: contain;
   border-radius: 12px;
 }
@@ -131,11 +131,11 @@ button {
  
 .login-btn {
   background-color: #253f59;
-  color: #fff;
+  color: black;
 }
  
 .login-btn:hover {
-  background-color: #1c3247;
+  background-color: white;
   transform: scale(1.02);
 }
  
