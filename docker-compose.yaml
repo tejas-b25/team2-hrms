@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   springboot-service:
-    image: hrms-backend-fixed
+    image: tejas2506/t2-hr-ba:w1
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-service:3306/hrms2
       SPRING_DATASOURCE_USERNAME: root
@@ -15,7 +15,7 @@ services:
       - mynetwork
 
   frontend:
-    image: hrms-frontend-fixed
+    image: tejas2506/t2-hr-fr:w1
     ports:
       - "4200:80"
     depends_on:
