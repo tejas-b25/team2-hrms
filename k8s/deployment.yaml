@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: tejas2506/hrms-frontend:d1
+          image: tejas2506/t2-hr-fr:e1
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -62,7 +62,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: tejas2506/hrms-backend:d1
+          image: tejas2506/t2-hr-ba:e1
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -76,7 +76,7 @@ spec:
             - name: MYSQL_PASSWORD
               value: "root"
             - name: MYSQL_DATABASE
-              value: "hrmsportal"
+              value: "hrms2"
 ---
 # MySQL Headless Service
 apiVersion: v1
@@ -116,4 +116,4 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: "root"
             - name: MYSQL_DATABASE
-              value: "hrmsportal"
+              value: "hrms2"
